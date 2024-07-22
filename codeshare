@@ -1,6 +1,2 @@
-WebElement select = driver.findElement(By.id("gender"));
-List<WebElement> options = select.findElements(By.tagName("Male"));
-for (WebElement option : options) {
-    if("Germany".equals(option.getText()))
-        option.click();   
-}
+Select objSelect = new Select(driver.findElement(By.id("Search-box")));
+objSelect.selectByValue("Automation Testing");
