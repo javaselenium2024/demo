@@ -1,0 +1,6 @@
+WebElement select = driver.findElement(By.id("gender"));
+List<WebElement> options = select.findElements(By.tagName("Male"));
+for (WebElement option : options) {
+    if("Germany".equals(option.getText()))
+        option.click();   
+}
