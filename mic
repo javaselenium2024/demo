@@ -1,0 +1,49 @@
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import io.github.bonigarcia.wdm.WebDriverManager;
+
+import java.util.HashMap;
+
+public class PermissionPopups {
+    public static void main(String[] args) {
+        // Set up Chrome options to disable popups
+        ChromeOptions options = new ChromeOptions();
+        HashMap<String, Integer> contentSettings = new HashMap<String, Integer>();
+        HashMap<String, Object> profile = new HashMap<String, Object>();
+        HashMap<String, Object> prefs = new HashMap<String, Object>();
+
+        // Disable notifications
+        contentSettings.put("notifications", 2);
+        // Disable geolocation
+        contentSettings.put("geolocation", 2);
+        // Disable microphone access
+        contentSettings.put("media_stream_mic", 2);
+        // Disable camera access (optional)
+        contentSettings.put("media_stream_camera", 2);
+
+        // Apply content settings
+        profile.put("managed_default_content_settings", contentSettings);
+        prefs.put("profile", profile);
+
+        // Set experimental options
+        options.setExperimentalOption("prefs", prefs);
+
+        // Add other Chrome arguments (optional)
+        options.addArguments("disable-notifications");
+        options.addArguments("disable-geolocation");
+        options.addArguments("disable-media-stream");
+
+        // Set up WebDriver
+        WebDriverManager.chromedriver().setup();
+        WebDriver driver = new ChromeDriver(options);
+        driver.manage().window().maximize();
+
+        // Example URLs
+        driver.get("https://www.cleartrip.com/");
+        driver.get("https://whatmylocation.com/");
+
+        // Close the driver after operations
+        driver.quit();
+    }
+}
