@@ -1,0 +1,17 @@
+Version 1:
+let options = new Options();
+
+options.set("preferences.profile.content_settings.exceptions.media_stream_camera.'<localhost-address>,*'.setting", 1)
+
+options.set("preferences.profile.content_settings.media_stream_mic.'<localhost-address>,*'.setting", 1);
+
+let driver = await new Builder().setChromeOptions(options).forBrowser(browser).build();
+
+Version 2:
+let options = new Options();
+
+options.setUserPreferences({"preferences.profile.content_settings.exceptions.media_stream_camera.'http://localhost:3005,*'.setting": 1,
+
+ "preferences.profile.content_settings.media_stream_mic.'http://localhost:3005,*'.setting": 1});
+
+let driver = await new Builder().setChromeOptions(options).forBrowser(browser).build();
