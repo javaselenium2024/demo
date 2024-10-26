@@ -1,0 +1,8 @@
+public void getIframe(final WebDriver driver, final String id) {
+    final List<WebElement> iframes = driver.findElements(By.tagName("iframe"));
+    for (WebElement iframe : iframes) {
+        if (iframe.getAttribute("id").equals(id)) {
+        // TODO your stuff.
+        }
+    }
+}
