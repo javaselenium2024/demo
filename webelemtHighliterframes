@@ -1,0 +1,40 @@
+  // Method to highlight all elements inside each iframe
+    public void highlightAllElementsInIframes() {
+        // Get a list of all iframes on the page
+        List<WebElement> iframes = driver.findElements(By.tagName("iframe"));
+
+        // Iterate over each iframe
+        for (int i = 0; i < iframes.size(); i++) {
+            // Switch to the iframe by index
+            driver.switchTo().frame(i);
+
+            // Get all elements inside the iframe
+            List<WebElement> elements = driver.findElements(By.cssSelector("*"));
+
+            // Highlight each element
+            for (WebElement element : elements) {
+                highlightElement(element);
+            }
+
+            // Switch back to the main page content
+            driver.switchTo().defaultContent();
+        }
+    }
+
+    // Helper method to highlight an element by changing its style temporarily
+    private void highlightElement(WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        // Store the original style to revert back after highlighting
+        String originalStyle = element.getAttribute("style");
+
+        // Apply a highlight style
+        js.executeScript("arguments[0].style.border='3px solid red'", element);
+
+        // Revert back to the original style after a short delay
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        js.executeScript("arguments[0].style=arguments[1]", element, originalStyle);
+    }
