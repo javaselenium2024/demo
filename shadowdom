@@ -1,0 +1,84 @@
+import org.openqa.selenium.JavascriptExecutor;
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+
+import java.util.List;
+
+public class ShadowDOMHighlighter {
+
+    private WebDriver driver;
+
+    public ShadowDOMHighlighter(WebDriver driver) {
+        this.driver = driver;
+    }
+
+    /**
+     * Highlights all elements inside Shadow DOMs on a page one by one.
+     */
+    public void highlightAllElementsInShadowDOM() {
+        // Get a list of all shadow hosts on the page
+        List<WebElement> shadowHosts = (List<WebElement>) ((JavascriptExecutor) driver)
+                .executeScript("return Array.from(document.querySelectorAll('*')).filter(e => e.shadowRoot != null)");
+
+        // Iterate over each shadow host to highlight elements within its Shadow DOM
+        for (WebElement shadowHost : shadowHosts) {
+            highlightElementsInShadowDOM(shadowHost);
+        }
+    }
+
+    /**
+     * Highlights each element within a single Shadow DOM.
+     *
+     * @param shadowHost The root element containing the Shadow DOM.
+     */
+    private void highlightElementsInShadowDOM(WebElement shadowHost) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+
+        // Use JavaScript to retrieve all elements within the shadow DOM
+        List<WebElement> shadowElements = (List<WebElement>) js.executeScript(
+                "let elements = []; " +
+                "let retrieveElements = (root) => {" +
+                "    root.querySelectorAll('*').forEach(el => elements.push(el));" +
+                "};" +
+                "retrieveElements(arguments[0].shadowRoot);" +
+                "return elements;", 
+                shadowHost);
+
+        // Highlight each element in the Shadow DOM
+        for (WebElement element : shadowElements) {
+            highlightElement(element);
+        }
+    }
+
+    /**
+     * Helper method to highlight an element by adding a red border temporarily.
+     *
+     * @param element The WebElement to highlight.
+     */
+    private void highlightElement(WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        
+        // Store the original style to revert back after highlighting
+        String originalStyle = element.getAttribute("style");
+        
+        // Apply a highlight style
+        js.executeScript("arguments[0].style.border='3px solid red'", element);
+
+        // Revert to the original style after a short delay
+        try {
+            Thread.sleep(200);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        js.executeScript("arguments[0].style=arguments[1]", element, originalStyle);
+    }
+}
+
+
+// Initialize WebDriver
+WebDriver driver = new ChromeDriver();
+driver.get("your-website-url");
+
+// Initialize ShadowDOMHighlighter and highlight elements
+ShadowDOMHighlighter highlighter = new ShadowDOMHighlighter(driver);
+highlighter.highlightAllElementsInShadowDOM();
