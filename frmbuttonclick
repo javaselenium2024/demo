@@ -1,0 +1,105 @@
+/**
+     * Method to click all buttons inside forms on the page,
+     * including those inside iframes.
+     */
+    public void clickAllButtonsInForms() {
+        // First, handle form buttons outside of iframes
+        clickButtonsInFormsOutsideIframes();
+
+        // Now, handle form buttons inside each iframe
+        clickButtonsInFormsInsideIframes();
+    }
+
+    /**
+     * Clicks all buttons inside forms that are outside of iframes, highlighting and printing each.
+     */
+    private void clickButtonsInFormsOutsideIframes() {
+        List<WebElement> forms = driver.findElements(By.tagName("form"));
+        for (WebElement form : forms) {
+            clickButtonsInForm(form);
+        }
+    }
+
+    /**
+     * Switches to each iframe on the page, then clicks all buttons inside forms within each iframe.
+     */
+    private void clickButtonsInFormsInsideIframes() {
+        List<WebElement> iframes = driver.findElements(By.tagName("iframe"));
+
+        for (int i = 0; i < iframes.size(); i++) {
+            // Switch to the iframe by index
+            driver.switchTo().frame(i);
+
+            // Find all form elements inside this iframe
+            List<WebElement> forms = driver.findElements(By.tagName("form"));
+
+            // Click buttons in each form
+            for (WebElement form : forms) {
+                clickButtonsInForm(form);
+            }
+
+            // Switch back to the main page content after processing each iframe
+            driver.switchTo().defaultContent();
+        }
+    }
+
+    /**
+     * Clicks all buttons within a specific form element, highlighting and printing each.
+     *
+     * @param form The form WebElement containing the buttons.
+     */
+    private void clickButtonsInForm(WebElement form) {
+        // Find all button elements within this form
+        List<WebElement> buttons = form.findElements(By.tagName("button"));
+
+        for (WebElement button : buttons) {
+            highlightElement(button);
+            printButtonDetails(button);
+            button.click();
+            pause(2000); // 2 seconds delay after clicking each button
+        }
+    }
+
+    /**
+     * Helper method to highlight an element by changing its style temporarily.
+     *
+     * @param element The WebElement to highlight.
+     */
+    private void highlightElement(WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        String originalStyle = element.getAttribute("style");
+
+        // Apply a highlight style
+        js.executeScript("arguments[0].style.border='3px solid blue'", element);
+
+        // Revert to the original style after highlighting
+        pause(2000); // Wait for 2 seconds to see the highlight
+        js.executeScript("arguments[0].style=arguments[1]", element, originalStyle);
+    }
+
+    /**
+     * Helper method to print button details (text or name).
+     *
+     * @param button The button WebElement.
+     */
+    private void printButtonDetails(WebElement button) {
+        String buttonText = button.getText();
+        if (buttonText.isEmpty()) {
+            buttonText = button.getAttribute("name");
+        }
+        System.out.println("Button: " + (buttonText.isEmpty() ? "Unnamed Button" : buttonText));
+    }
+
+    /**
+     * Pauses execution for the specified number of milliseconds.
+     *
+     * @param milliseconds Number of milliseconds to wait.
+     */
+    private void pause(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+}
