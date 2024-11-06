@@ -1,0 +1,21 @@
+public void clickSSOLoginButton() {
+        WebDriverWait wait = new WebDriverWait(driver, 20);
+        
+        // Switch to the iframe containing the login button
+        wait.until(ExpectedConditions.frameToBeAvailableAndSwitchToIt(By.id("iframe_id")));
+
+        // Switch to the form if required
+        WebElement form = driver.findElement(By.id("form_id"));
+        driver.switchTo().frame(form);
+
+        // Wait and click on the SSO Login button
+        WebElement ssoLoginButton = wait.until(ExpectedConditions.elementToBeClickable(By.id("sso_login_button_id")));
+        ssoLoginButton.click();
+
+        // Return to the main content if needed
+        driver.switchTo().defaultContent();
+    }
+
+
+
+Adjust the iframe_id, form_id, and sso_login_button_id to the actual IDs in your application.
