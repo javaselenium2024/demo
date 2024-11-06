@@ -1,0 +1,38 @@
+
+// Locate the iframe and the button within it
+WebElement iframe = driver.findElement(By.id("iframeId")); // Use the appropriate iframe locator
+By buttonLocator = By.id("buttonId"); // Replace with the button locator
+
+// Click the button inside the specified iframe
+clickButtonInIframe(iframe, buttonLocator);
+
+
+
+
+
+/**
+     * Clicks a button inside a specified iframe using JavaScript.
+     *
+     * @param iframe     The WebElement representing the iframe to switch to.
+     * @param buttonBy   The By locator to find the button inside the iframe.
+     */
+    public void clickButtonInIframe(WebElement iframe, By buttonBy) {
+        // Switch to the specified iframe
+        driver.switchTo().frame(iframe);
+
+        try {
+            // Locate the button inside the iframe
+            WebElement button = driver.findElement(buttonBy);
+
+            // Use JavaScript to click the button
+            JavascriptExecutor js = (JavascriptExecutor) driver;
+            js.executeScript("arguments[0].click();", button);
+
+            System.out.println("Button clicked successfully inside iframe.");
+        } catch (Exception e) {
+            System.out.println("Failed to click button inside iframe: " + e.getMessage());
+        } finally {
+            // Switch back to the main content
+            driver.switchTo().defaultContent();
+        }
+    }
