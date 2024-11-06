@@ -1,0 +1,23 @@
+ // Method to highlight and click all clickable elements (buttons) inside each iframe
+    public void highlightAndClickButtonsInIframes() {
+        // Get a list of all iframes on the page
+        List<WebElement> iframes = driver.findElements(By.tagName("iframe"));
+
+        // Iterate over each iframe
+        for (int i = 0; i < iframes.size(); i++) {
+            // Switch to the iframe by index
+            driver.switchTo().frame(i);
+
+            // Get all clickable button elements inside the iframe
+            List<WebElement> buttons = driver.findElements(By.tagName("button"));
+
+            // Highlight and click each button element
+            for (WebElement button : buttons) {
+                highlightElement(button); // Highlight the button
+                button.click(); // Click the button
+            }
+
+            // Switch back to the main page content
+            driver.switchTo().defaultContent();
+        }
+    }
