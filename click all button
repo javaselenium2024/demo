@@ -1,0 +1,92 @@
+ /**
+     * Method to highlight, print, and click all buttons on the page,
+     * including those inside iframes.
+     */
+    public void clickAllButtons() {
+        // First, handle buttons outside of iframes
+        clickButtonsOutsideIframes();
+
+        // Now, handle buttons inside each iframe
+        clickButtonsInsideIframes();
+    }
+
+    /**
+     * Clicks all buttons outside of any iframe, highlighting and printing each.
+     */
+    private void clickButtonsOutsideIframes() {
+        List<WebElement> buttons = driver.findElements(By.tagName("button"));
+        for (WebElement button : buttons) {
+            highlightElement(button);
+            printButtonDetails(button);
+            button.click();
+            pause(5000); // 5 seconds delay
+        }
+    }
+
+    /**
+     * Switches to each iframe on the page, then clicks all buttons inside it.
+     */
+    private void clickButtonsInsideIframes() {
+        List<WebElement> iframes = driver.findElements(By.tagName("iframe"));
+
+        for (int i = 0; i < iframes.size(); i++) {
+            // Switch to the iframe by index
+            driver.switchTo().frame(i);
+
+            // Find all buttons inside this iframe
+            List<WebElement> buttons = driver.findElements(By.tagName("button"));
+
+            for (WebElement button : buttons) {
+                highlightElement(button);
+                printButtonDetails(button);
+                button.click();
+                pause(5000); // 5 seconds delay
+            }
+
+            // Switch back to the main page content after processing each iframe
+            driver.switchTo().defaultContent();
+        }
+    }
+
+    /**
+     * Helper method to highlight an element by changing its style temporarily.
+     *
+     * @param element The WebElement to highlight.
+     */
+    private void highlightElement(WebElement element) {
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        String originalStyle = element.getAttribute("style");
+        
+        // Apply a highlight style
+        js.executeScript("arguments[0].style.border='3px solid red'", element);
+
+        // Revert to the original style after highlighting
+        pause(5000); // Wait for 5 seconds to see the highlight
+        js.executeScript("arguments[0].style=arguments[1]", element, originalStyle);
+    }
+
+    /**
+     * Helper method to print button details (text or name).
+     *
+     * @param button The button WebElement.
+     */
+    private void printButtonDetails(WebElement button) {
+        String buttonText = button.getText();
+        if (buttonText.isEmpty()) {
+            buttonText = button.getAttribute("name");
+        }
+        System.out.println("Button: " + (buttonText.isEmpty() ? "Unnamed Button" : buttonText));
+    }
+
+    /**
+     * Pauses execution for the specified number of milliseconds.
+     *
+     * @param milliseconds Number of milliseconds to wait.
+     */
+    private void pause(long milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
