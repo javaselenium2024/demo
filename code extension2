@@ -1,0 +1,28 @@
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+
+# URL to open
+site_url = 'https://www.google.com/'
+
+# Path to the ChromeDriver executable
+chrome_driver_path = 'C:\\path\\to\\chromedriver.exe'  # Update this to the correct path
+
+# Set ChromeOptions
+options = webdriver.ChromeOptions()
+options.add_argument("user-data-dir=C:\\Users\\shelt\\AppData\\Local\\Google\\Chrome\\User Data")  # Path to Chrome user data
+options.add_argument('--profile-directory=Default')  # Specify the profile to use
+
+# Create Service object with the path to ChromeDriver
+service = Service(executable_path=chrome_driver_path)
+
+# Create WebDriver instance
+driver = webdriver.Chrome(service=service, options=options)
+
+# Open the desired URL
+driver.get(site_url)
+
+# Print the page title
+print(driver.title)
+
+# Close the browser
+driver.close()
