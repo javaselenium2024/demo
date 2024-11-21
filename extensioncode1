@@ -1,0 +1,11 @@
+ // Create ChromeOptions
+        ChromeOptions options = new ChromeOptions();
+
+        // Specify the user data directory
+        options.addArguments("user-data-dir=C:/Users/<YourUsername>/AppData/Local/Google/Chrome/User Data");
+
+        // Optionally specify the profile to use (e.g., Default)
+        options.addArguments("profile-directory=Default");
+
+        // Launch Chrome with the specified options
+        WebDriver driver = new ChromeDriver(options);
