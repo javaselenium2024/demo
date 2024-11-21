@@ -1,0 +1,34 @@
+import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.chrome.service.Service;
+
+public class LaunchChromeWithProfile {
+    public static void main(String[] args) {
+        // URL to open
+        String siteUrl = "https://www.google.com/";
+
+        // Path to ChromeDriver executable
+        String chromeDriverPath = "C:\\path\\to\\chromedriver.exe"; // Update this to your ChromeDriver path
+
+        // Configure ChromeOptions
+        ChromeOptions options = new ChromeOptions();
+        options.addArguments("user-data-dir=C:\\Users\\shelt\\AppData\\Local\\Google\\Chrome\\User Data"); // Path to Chrome user data
+        options.addArguments("--profile-directory=Default"); // Specify the profile to use
+
+        // Create ChromeDriver instance using the Service and options
+        System.setProperty("webdriver.chrome.driver", chromeDriverPath);
+        WebDriver driver = new ChromeDriver(options);
+
+        try {
+            // Open the desired URL
+            driver.get(siteUrl);
+
+            // Print the page title
+            System.out.println("Page title: " + driver.getTitle());
+        } finally {
+            // Close the browser
+            driver.quit();
+        }
+    }
+}
