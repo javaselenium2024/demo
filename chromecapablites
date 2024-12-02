@@ -1,0 +1,3 @@
+browserName=chrome
+chromeDriverPath=C:/path/to/chromedriver.exe
+chromeBinaryPath=C:/path/to/chrome.exe
