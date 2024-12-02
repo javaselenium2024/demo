@@ -1,3 +1,9 @@
 browserName=chrome
 chromeDriverPath=C:/path/to/chromedriver.exe
 chromeBinaryPath=C:/path/to/chrome.exe
+
+
+
+System.setProperty("webdriver.chrome.driver", "C:/path/to/chromedriver.exe");
+String chromeDriverPath = System.getProperty("webdriver.chrome.driver");
+System.out.println("ChromeDriver is launching from: " + chromeDriverPath);
